@@ -1,0 +1,115 @@
+<div class="tasks-card">
+  <div class="tasks-header">
+    <h2>Tasks</h2>
+  </div>
+  
+  <div class="tasks-content">
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading tasks...</p>
+    </div>
+
+    <div *ngIf="error" class="error-state">
+      <p>{{error}}</p>
+      <button class="btn btn-primary" (click)="loadTasks()">Retry</button>
+    </div>
+
+    <div *ngIf="!loading && !error">
+      <div class="tabs">
+        <button class="tab-button" 
+                [class.active]="activeTab === 'pending'"
+                (click)="setActiveTab('pending')">
+          PENDING ({{pendingTasks.length}})
+        </button>
+        <button class="tab-button" 
+                [class.active]="activeTab === 'completed'"
+                (click)="setActiveTab('completed')">
+          COMPLETED ({{completedTasks.length}})
+        </button>
+      </div>
+
+      <div class="tab-content">
+        <!-- Pending Tasks -->
+        <div *ngIf="activeTab === 'pending'">
+          <ng-container *ngIf="pendingTasks.length === 0">
+            <p class="empty-state">Currently, you don't have any pending tasks</p>
+          </ng-container>
+          
+          <div class="accordion">
+            <div *ngFor="let task of pendingTasks" class="accordion-item">
+              <div class="accordion-header" (click)="task.expanded = !task.expanded">
+                <div class="accordion-title">
+                  <span class="expand-icon" [class.expanded]="task.expanded">▼</span>
+                  {{task.title}}
+                </div>
+                <button class="btn btn-release" 
+                        [class.enabled]="canRelease(task)"
+                        *ngIf="task.title.includes('Annual Inspection')" 
+                        [disabled]="!canRelease(task)"
+                        (click)="$event.stopPropagation(); showReleaseConfirmation(task)">
+                  RELEASE TO FM
+                </button>
+              </div>
+              
+              <div class="accordion-content" [class.expanded]="task.expanded">
+                <div class="subtasks-list" *ngIf="task.subtasks">
+                  <div *ngFor="let subtask of task.subtasks" class="subtask-item">
+                    <div class="subtask-content">
+                      <div class="posted-column">
+                        Posted: {{formatDate(task.date)}}
+                      </div>
+                      <div class="content-column">
+                        <div class="subtask-info">
+                          <span class="subtask-title">{{subtask.title}}</span>
+                          <span class="subtask-date">Updated: {{subtask.updated}}</span>
+                        </div>
+                        <ng-container *ngIf="!subtask.title.includes('Update Open Items')">
+                          <button class="btn btn-upload" 
+                                  *ngIf="!subtask.selectedFile"
+                                  (click)="showUploadModal(subtask)">
+                            UPLOAD
+                          </button>
+                          <div class="dropdown" *ngIf="subtask.selectedFile">
+                            <button class="btn-dots" (click)="subtask.showMenu = !subtask.showMenu">
+                              <div class="dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                              </div>
+                            </button>
+                            <div class="dropdown-menu" *ngIf="subtask.showMenu">
+                              <ng-container *ngIf="subtask.title.includes('Annual Inspection Form')">
+                                <button class="dropdown-item" (click)="reviewFile(subtask)">REVIEW</button>
+                                <button class="dropdown-item" (click)="reuploadFile(subtask)">REUPLOAD</button>
+                                <button class="dropdown-item" (click)="deleteFile(subtask)">DELETE</button>
+                              </ng-container>
+                              <ng-container *ngIf="subtask.title.includes('Rent Roll')">
+                                <button class="dropdown-item" (click)="downloadFile(subtask)">DOWNLOAD</button>
+                                <button class="dropdown-item" (click)="reuploadFile(subtask)">REUPLOAD</button>
+                                <button class="dropdown-item" (click)="deleteFile(subtask)">DELETE</button>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completed Tasks -->
+        <div *ngIf="activeTab === 'completed'">
+          <div class="task-item" *ngFor="let task of completedTasks">
+            <div class="task-header">
+              <span class="task-title">{{task.title}}</span>
+              <span class="posted-date">{{formatDate(task.date)}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

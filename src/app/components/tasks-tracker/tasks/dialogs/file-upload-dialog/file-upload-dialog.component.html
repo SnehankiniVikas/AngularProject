@@ -1,0 +1,59 @@
+<div class="upload-dialog">
+  <h2>{{data.title}}</h2>
+  
+  <ng-container *ngIf="!selectedFile">
+    <div class="upload-area" 
+         (dragover)="onDragOver($event)" 
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)"
+         (click)="fileInput.click()"
+         [class.drag-over]="isDragOver">
+      <span class="icon icon-cloud-upload"></span>
+      <p>Drop your file here or click to browse</p>
+      <input #fileInput type="file" 
+             [accept]="'.xlsx,.xls'" 
+             (change)="onFileSelected($event)" 
+             style="display: none">
+    </div>
+  </ng-container>
+
+  <div class="file-info">
+    <span class="icon icon-info" 
+          matTooltip="Only Excel files are supported"
+          matTooltipPosition="above"></span>
+    <span>File Types: .xlsx, xls</span>
+    <span class="separator">Max Size: 50Mb</span>
+  </div>
+
+  <ng-container *ngIf="selectedFile">
+    <div class="selected-file">
+      <div class="file-details">
+        <span class="file-name">{{selectedFile.name}}</span>
+        <div class="file-meta">
+          <span>.{{selectedFile.name.split('.').pop()}}</span>
+          <span>|</span>
+          <span>{{formatFileSize(selectedFile.size)}}</span>
+          <span>|</span>
+          <span>{{formatDate(selectedFile.lastModified)}}</span>
+        </div>
+      </div>
+      <div class="file-actions">
+        <button class="icon-button success-icon">
+          <span class="icon icon-check-circle"></span>
+        </button>
+        <button class="icon-button delete-icon" (click)="removeFile()">
+          <span class="icon icon-delete"></span>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="dialog-actions">
+    <button class="btn btn-secondary" (click)="onCancel()">CANCEL</button>
+    <button class="btn btn-primary"
+            [disabled]="!selectedFile" 
+            (click)="onUpload()">
+      UPLOAD
+    </button>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="tab-container">
+  <div class="back-button">
+    <span class="icon icon-arrow-back"></span>
+    BACK
+  </div>
+  
+  <div class="property-name">
+    Property Name
+  </div>
+
+  <nav class="tab-nav">
+    <button 
+      *ngFor="let tab of tabs" 
+      [class.active]="activeTab === tab.id"
+      (click)="setActiveTab(tab.id)">
+      {{tab.label}}
+    </button>
+  </nav>
+
+  <div class="tab-content">
+    <app-tasks-tracker *ngIf="activeTab === 'tasks'"></app-tasks-tracker>
+    <app-inspections *ngIf="activeTab === 'inspections'"></app-inspections>
+    <app-open-items *ngIf="activeTab === 'openItems'"></app-open-items>
+    <app-capital-expenditures *ngIf="activeTab === 'capex'"></app-capital-expenditures>
+  </div>
+</div>

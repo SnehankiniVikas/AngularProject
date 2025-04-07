@@ -1,0 +1,16 @@
+.tasks-tracker-container {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  padding: 20px;
+}
+
+app-inspection-tracker {
+  flex: 0 0 45%;
+  max-width: 45%;
+}
+
+app-tasks {
+  flex: 0 0 55%;
+  max-width: 55%;
+}

@@ -1,0 +1,56 @@
+.release-dialog {
+  padding: 24px;
+  width: 600px;
+  max-width: 100%;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #1a202c;
+}
+
+.close-button {
+  padding: 0;
+  min-width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.close-icon {
+  font-size: 24px;
+  color: #718096;
+}
+
+.dialog-content {
+  margin-bottom: 24px;
+}
+
+p {
+  margin: 0;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-button {
+  color: #4a5568;
+}
+
+.confirm-button {
+  background-color: #2d3748;
+  color: white;
+}
